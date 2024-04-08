@@ -1,6 +1,7 @@
-name: 'The name of your action here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Fetch open PRs'
+description:
+  'Fetches open PRs from repository and outputs them for following actions'
+author: 'Jari Voutilainen'
 
 # Add your action's branding here. This will appear on the GitHub Marketplace.
 branding:
@@ -9,15 +10,22 @@ branding:
 
 # Define your inputs here.
 inputs:
-  milliseconds:
-    description: 'Your input description here'
+  token:
+    description: 'GitHub Access Token'
+    required: false
+    default: ${{ github.token }}
+  repository:
+    description: 'Repository from the pull requests are fetched'
     required: true
-    default: '1000'
+  ignored_users:
+    description:
+      'List of usernames which are ignored from the outputted PR list'
+    required: false
 
 # Define your outputs here.
 outputs:
-  time:
-    description: 'Your output description here'
+  PRs:
+    description: 'List of open PRs in given format'
 
 runs:
   using: node20
