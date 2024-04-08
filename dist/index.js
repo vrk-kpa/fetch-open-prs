@@ -29022,7 +29022,14 @@ async function run() {
             owner,
             repo
         });
-        core.setOutput('PRs', prList);
+        const parsedPrList = [];
+        prList.data.forEach(pr => {
+            parsedPrList.push({
+                url: pr['url'],
+                title: pr['title']
+            });
+        });
+        core.setOutput('PRs', parsedPrList);
     }
     catch (error) {
         // Fail the workflow run if an error occurs

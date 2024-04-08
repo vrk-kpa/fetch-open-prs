@@ -18,7 +18,16 @@ export async function run(): Promise<void> {
       repo
     })
 
-    core.setOutput('PRs', prList)
+    const parsedPrList: { url: string; title: string }[] = []
+
+    prList.data.forEach(pr => {
+      parsedPrList.push({
+        url: pr['url'],
+        title: pr['title']
+      })
+    })
+
+    core.setOutput('PRs', parsedPrList)
   } catch (error) {
     // Fail the workflow run if an error occurs
     if (error instanceof Error) core.setFailed(error.message)
