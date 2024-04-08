@@ -18,13 +18,26 @@ export async function run(): Promise<void> {
       repo
     })
 
-    const parsedPrList: { url: string; title: string }[] = []
+    const parsedPrList: {
+      url: string
+      title: string
+      user: string
+      created_at: string
+    }[] = []
 
     prList.data.forEach(pr => {
-      parsedPrList.push({
-        url: pr['url'],
-        title: pr['title']
-      })
+      let parsedPr = {
+        url: pr['html_url'],
+        title: pr['title'],
+        user: '',
+        created_at: pr['created_at']
+      }
+
+      if (pr['user']) {
+        parsedPr['user'] = pr['user']['login']
+      }
+
+      parsedPrList.push(parsedPr)
     })
 
     core.setOutput('PRs', parsedPrList)
