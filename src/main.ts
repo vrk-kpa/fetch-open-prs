@@ -25,8 +25,8 @@ export async function run(): Promise<void> {
       created_at: string
     }[] = []
 
-    prList.data.forEach(pr => {
-      let parsedPr = {
+    for (let pr of prList.data) {
+      const parsedPr = {
         url: pr['html_url'],
         title: pr['title'],
         user: '',
@@ -38,7 +38,7 @@ export async function run(): Promise<void> {
       }
 
       parsedPrList.push(parsedPr)
-    })
+    }
 
     core.setOutput('PRs', parsedPrList)
   } catch (error) {

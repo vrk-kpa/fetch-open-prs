@@ -29023,8 +29023,8 @@ async function run() {
             repo
         });
         const parsedPrList = [];
-        prList.data.forEach(pr => {
-            let parsedPr = {
+        for (let pr of prList.data) {
+            const parsedPr = {
                 url: pr['html_url'],
                 title: pr['title'],
                 user: '',
@@ -29034,7 +29034,7 @@ async function run() {
                 parsedPr['user'] = pr['user']['login'];
             }
             parsedPrList.push(parsedPr);
-        });
+        }
         core.setOutput('PRs', parsedPrList);
     }
     catch (error) {
