@@ -29016,11 +29016,11 @@ async function run() {
     try {
         const token = core.getInput('token');
         const octokit = github.getOctokit(token);
-        const repo = core.getInput('repository');
-        const [owner, repository] = repo.split('/');
+        const repository = core.getInput('repository');
+        const [owner, repo] = repository.split('/');
         const prList = await octokit.rest.pulls.list({
-            owner: owner,
-            repo: repo
+            owner,
+            repo
         });
         core.setOutput('PRs', prList);
     }
