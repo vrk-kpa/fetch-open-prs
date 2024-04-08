@@ -47,7 +47,7 @@ describe('action', () => {
         }
       ]
     })
-    let octokitMock = {
+    const octokitMock = {
       rest: {
         pulls: {
           list: mockList
