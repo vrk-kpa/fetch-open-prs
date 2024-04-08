@@ -29018,10 +29018,18 @@ async function run() {
         const octokit = github.getOctokit(token);
         const repository = core.getInput('repository');
         const [owner, repo] = repository.split('/');
+        core.debug(`owner: ${owner}`);
+        core.debug(`repo: ${repo}`);
         const prList = await octokit.rest.pulls.list({
             owner,
             repo
         });
+        const ignored_users = core.getInput('ignored_users');
+        let ignored_users_list = [];
+        if (ignored_users) {
+            ignored_users_list = JSON.parse(ignored_users);
+            core.debug(`Ignored users length: ${ignored_users_list.length}`);
+        }
         const parsedPrList = [];
         for (const pr of prList.data) {
             const parsedPr = {
@@ -29030,7 +29038,7 @@ async function run() {
                 user: '',
                 created_at: pr['created_at']
             };
-            if (pr['user']) {
+            if (pr['user'] && !ignored_users_list.includes(pr['user']['login'])) {
                 parsedPr['user'] = pr['user']['login'];
             }
             parsedPrList.push(parsedPr);

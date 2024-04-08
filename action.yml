@@ -17,6 +17,10 @@ inputs:
   repository:
     description: 'Repository from the pull requests are fetched'
     required: true
+  ignored_users:
+    description:
+      'List of usernames which are ignored from the outputted PR list'
+    required: false
 
 # Define your outputs here.
 outputs:
