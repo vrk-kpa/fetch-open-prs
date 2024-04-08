@@ -3,12 +3,6 @@ description:
   'Fetches open PRs from repository and outputs them for following actions'
 author: 'Jari Voutilainen'
 
-# Add your action's branding here. This will appear on the GitHub Marketplace.
-branding:
-  icon: 'heart'
-  color: 'red'
-
-# Define your inputs here.
 inputs:
   token:
     description: 'GitHub Access Token'
@@ -21,8 +15,11 @@ inputs:
     description:
       'List of usernames which are ignored from the outputted PR list'
     required: false
+  format:
+    description: 'Format to use in output'
+    required: false
+    default: 'json'
 
-# Define your outputs here.
 outputs:
   PRs:
     description: 'List of open PRs in given format'

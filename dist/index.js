@@ -29040,10 +29040,20 @@ async function run() {
             };
             if (pr['user'] && !ignored_users_list.includes(pr['user']['login'])) {
                 parsedPr['user'] = pr['user']['login'];
+                parsedPrList.push(parsedPr);
             }
-            parsedPrList.push(parsedPr);
         }
-        core.setOutput('PRs', parsedPrList);
+        const format = core.getInput('format');
+        if (format === 'markdown') {
+            let markdownOutput = '';
+            for (const pr of parsedPrList) {
+                markdownOutput += `* [${pr['title']}](${pr['url']}) by ${pr['user']}\n`;
+            }
+            core.setOutput('PRs', markdownOutput);
+        }
+        else {
+            core.setOutput('PRs', parsedPrList);
+        }
     }
     catch (error) {
         // Fail the workflow run if an error occurs

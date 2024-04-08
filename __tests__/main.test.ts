@@ -164,4 +164,28 @@ describe('action', () => {
       ])
     )
   })
+
+  it('Output should be formatted as markdown', async () => {
+    getInputMock.mockImplementation(name => {
+      switch (name) {
+        case 'repository':
+          return 'vrk-kpa/fetch-open-prs-action'
+        case 'ignored_users':
+          return '["first_ignore", "second_ignore"]'
+        case 'format':
+          return 'markdown'
+        default:
+          return ''
+      }
+    })
+
+    await main.run()
+    expect(runMock).toHaveReturned()
+
+    expect(setOutputMock).toHaveBeenNthCalledWith(
+      1,
+      'PRs',
+      expect.stringContaining('* [some title](http://example.com) by some_user')
+    )
+  })
 })
