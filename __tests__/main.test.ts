@@ -13,42 +13,31 @@ import { getOctokit } from '@actions/github'
 // Mock the action's main function
 const runMock = jest.spyOn(main, 'run')
 
-// Other utilities
-const timeRegex = /^\d{2}:\d{2}:\d{2}/
-
 // Mock the GitHub Actions core library
-let debugMock: jest.SpiedFunction<typeof core.debug>
 let errorMock: jest.SpiedFunction<typeof core.error>
 let getInputMock: jest.SpiedFunction<typeof core.getInput>
-let setFailedMock: jest.SpiedFunction<typeof core.setFailed>
 let setOutputMock: jest.SpiedFunction<typeof core.setOutput>
 
 jest.mock('@actions/github', () => ({
   context: {
     payload: {
       pull_request: {
-        number: 1,
-      },
+        number: 1
+      }
     },
     repo: {
       owner: 'owner',
-      repo: 'repo',
-    },
+      repo: 'repo'
+    }
   },
-  getOctokit: jest.fn(),
-}));
-
-
-
+  getOctokit: jest.fn()
+}))
 
 describe('action', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-
-    debugMock = jest.spyOn(core, 'debug').mockImplementation()
     errorMock = jest.spyOn(core, 'error').mockImplementation()
     getInputMock = jest.spyOn(core, 'getInput').mockImplementation()
-    setFailedMock = jest.spyOn(core, 'setFailed').mockImplementation()
     setOutputMock = jest.spyOn(core, 'setOutput').mockImplementation()
     const mockList = jest.fn()
     mockList.mockImplementation(() => {
