@@ -29023,7 +29023,7 @@ async function run() {
             repo
         });
         const parsedPrList = [];
-        for (let pr of prList.data) {
+        for (const pr of prList.data) {
             const parsedPr = {
                 url: pr['html_url'],
                 title: pr['title'],

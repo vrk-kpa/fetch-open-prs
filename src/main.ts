@@ -25,7 +25,7 @@ export async function run(): Promise<void> {
       created_at: string
     }[] = []
 
-    for (let pr of prList.data) {
+    for (const pr of prList.data) {
       const parsedPr = {
         url: pr['html_url'],
         title: pr['title'],
