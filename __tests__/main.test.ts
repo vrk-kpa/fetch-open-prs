@@ -43,8 +43,9 @@ describe('action', () => {
     mockList.mockImplementation(() => {
       return [
         {
-          url: "http://example.com"
-        }]
+          url: 'http://example.com'
+        }
+      ]
     })
     let octokitMock = {
       rest: {
@@ -52,9 +53,9 @@ describe('action', () => {
           list: mockList
         }
       }
-    };
+    }
 
-    (getOctokit as jest.Mock).mockReturnValueOnce(octokitMock)
+    ;(getOctokit as jest.Mock).mockReturnValueOnce(octokitMock)
   })
 
   it('sets the PRs output', async () => {
@@ -73,14 +74,13 @@ describe('action', () => {
     expect(setOutputMock).toHaveBeenNthCalledWith(
       1,
       'PRs',
-      expect.arrayContaining([{
-        url: "http://example.com"
-      }])
+      expect.arrayContaining([
+        {
+          url: 'http://example.com'
+        }
+      ])
     )
-
 
     expect(errorMock).not.toHaveBeenCalled()
   })
-
-
 })
