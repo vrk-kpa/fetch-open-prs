@@ -29040,7 +29040,9 @@ async function run() {
             };
             if (pr['user'] && !ignored_users_list.includes(pr['user']['login'])) {
                 parsedPr['user'] = pr['user']['login'];
-                parsedPrList.push(parsedPr);
+                if (!pr['draft']) {
+                    parsedPrList.push(parsedPr);
+                }
             }
         }
         const format = core.getInput('format');

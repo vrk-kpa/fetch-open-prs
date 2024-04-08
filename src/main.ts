@@ -45,7 +45,9 @@ export async function run(): Promise<void> {
 
       if (pr['user'] && !ignored_users_list.includes(pr['user']['login'])) {
         parsedPr['user'] = pr['user']['login']
-        parsedPrList.push(parsedPr)
+        if (!pr['draft']) {
+          parsedPrList.push(parsedPr)
+        }
       }
     }
 
