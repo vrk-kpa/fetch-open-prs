@@ -10,6 +10,10 @@ branding:
 
 # Define your inputs here.
 inputs:
+  token:
+    description: 'GitHub Access Token'
+    required: false
+    default: ${{ github.token }}
   repository:
     description: 'Repository from the pull requests are fetched'
     required: true
