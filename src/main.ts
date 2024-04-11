@@ -33,7 +33,7 @@ export async function run(): Promise<void> {
       created_at: string
     }[] = []
 
-    for (let r of repositories) {
+    for (const r of repositories) {
       const [owner, repo] = r.split('/')
 
       core.debug(`owner: ${owner}`)

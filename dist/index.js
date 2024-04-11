@@ -29031,7 +29031,7 @@ async function run() {
             core.debug(`Ignored users length: ${ignored_users_list.length}`);
         }
         const parsedPrList = [];
-        for (let r of repositories) {
+        for (const r of repositories) {
             const [owner, repo] = r.split('/');
             core.debug(`owner: ${owner}`);
             core.debug(`repo: ${repo}`);
