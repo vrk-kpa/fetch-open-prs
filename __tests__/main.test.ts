@@ -129,7 +129,7 @@ describe('action', () => {
     getInputMock.mockImplementation(name => {
       switch (name) {
         case 'repository':
-          return 'vrk-kpa/fetch-open-prs-action'
+          return 'vrk-kpa/fetch-open-prs'
         case 'ignored_users':
           return '["first_ignore", "second_ignore"]'
         default:
@@ -140,10 +140,9 @@ describe('action', () => {
     await main.run()
     expect(runMock).toHaveReturned()
 
-    expect(debugMock).toHaveBeenNthCalledWith(1, 'owner: vrk-kpa')
-    expect(debugMock).toHaveBeenNthCalledWith(2, 'repo: fetch-open-prs-action')
-
-    expect(debugMock).toHaveBeenNthCalledWith(3, 'Ignored users length: 2')
+    expect(debugMock).toHaveBeenNthCalledWith(1, 'Ignored users length: 2')
+    expect(debugMock).toHaveBeenNthCalledWith(2, 'owner: vrk-kpa')
+    expect(debugMock).toHaveBeenNthCalledWith(3, 'repo: fetch-open-prs')
 
     expect(setOutputMock).toHaveBeenNthCalledWith(
       1,
@@ -187,5 +186,28 @@ describe('action', () => {
       'PRs',
       expect.stringContaining('* [some title](http://example.com) by some_user')
     )
+  })
+
+  it('Repository could be a list', async () => {
+    getInputMock.mockImplementation(name => {
+      switch (name) {
+        case 'repository':
+          return '["vrk-kpa/fetch-open-prs", "vrk-kpa/some-other-repo"]'
+        default:
+          return ''
+      }
+    })
+
+    await main.run()
+    expect(runMock).toHaveReturned()
+
+    expect(debugMock).toHaveBeenNthCalledWith(1, 'owner: vrk-kpa')
+    expect(debugMock).toHaveBeenNthCalledWith(2, 'repo: fetch-open-prs')
+    expect(debugMock).toHaveBeenNthCalledWith(3, 'owner: vrk-kpa')
+    expect(debugMock).toHaveBeenNthCalledWith(4, 'repo: some-other-repo')
+
+    expect(setOutputMock.mock.calls[0][1]).toHaveLength(6)
+
+    expect(errorMock).not.toHaveBeenCalled()
   })
 })

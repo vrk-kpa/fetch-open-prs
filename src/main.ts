@@ -10,15 +10,13 @@ export async function run(): Promise<void> {
     const token = core.getInput('token')
     const octokit = github.getOctokit(token)
     const repository = core.getInput('repository')
-    const [owner, repo] = repository.split('/')
 
-    core.debug(`owner: ${owner}`)
-    core.debug(`repo: ${repo}`)
-
-    const prList = await octokit.rest.pulls.list({
-      owner,
-      repo
-    })
+    let repositories = []
+    try {
+      repositories = JSON.parse(repository)
+    } catch (err) {
+      repositories = [repository]
+    }
 
     const ignored_users = core.getInput('ignored_users')
 
@@ -35,18 +33,30 @@ export async function run(): Promise<void> {
       created_at: string
     }[] = []
 
-    for (const pr of prList.data) {
-      const parsedPr = {
-        url: pr['html_url'],
-        title: pr['title'],
-        user: '',
-        created_at: pr['created_at']
-      }
+    for (let r of repositories) {
+      const [owner, repo] = r.split('/')
 
-      if (pr['user'] && !ignored_users_list.includes(pr['user']['login'])) {
-        parsedPr['user'] = pr['user']['login']
-        if (!pr['draft']) {
-          parsedPrList.push(parsedPr)
+      core.debug(`owner: ${owner}`)
+      core.debug(`repo: ${repo}`)
+
+      const prList = await octokit.rest.pulls.list({
+        owner,
+        repo
+      })
+
+      for (const pr of prList.data) {
+        const parsedPr = {
+          url: pr['html_url'],
+          title: pr['title'],
+          user: '',
+          created_at: pr['created_at']
+        }
+
+        if (pr['user'] && !ignored_users_list.includes(pr['user']['login'])) {
+          parsedPr['user'] = pr['user']['login']
+          if (!pr['draft']) {
+            parsedPrList.push(parsedPr)
+          }
         }
       }
     }
