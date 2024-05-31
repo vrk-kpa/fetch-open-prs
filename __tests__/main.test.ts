@@ -210,4 +210,30 @@ describe('action', () => {
 
     expect(errorMock).not.toHaveBeenCalled()
   })
+
+  it('Count of ignored users in output if output is markdown', async () => {
+    getInputMock.mockImplementation(name => {
+      switch (name) {
+        case 'repository':
+          return 'vrk-kpa/fetch-open-prs'
+        case 'ignored_users':
+          return '["first_ignore", "second_ignore"]'
+        case 'format':
+          return 'markdown'
+        default:
+          return ''
+      }
+    })
+
+    await main.run()
+    expect(runMock).toHaveReturned()
+
+    expect(setOutputMock).toHaveBeenNthCalledWith(
+      1,
+      'PRs',
+      expect.stringContaining(
+        '* 2 PRs by ignored users in [vrk-kpa/fetch-open-prs](https://github.com/vrk-kpa/fetch-open-prs/pulls)'
+      )
+    )
+  })
 })

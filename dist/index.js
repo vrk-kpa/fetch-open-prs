@@ -29031,6 +29031,7 @@ async function run() {
             core.debug(`Ignored users length: ${ignored_users_list.length}`);
         }
         const parsedPrList = [];
+        const ignored_users_pr_count_per_repository = [];
         for (const r of repositories) {
             const [owner, repo] = r.split('/');
             core.debug(`owner: ${owner}`);
@@ -29039,6 +29040,7 @@ async function run() {
                 owner,
                 repo
             });
+            let ignored_users_pr_count = 0;
             for (const pr of prList.data) {
                 const parsedPr = {
                     url: pr['html_url'],
@@ -29046,12 +29048,23 @@ async function run() {
                     user: '',
                     created_at: pr['created_at']
                 };
-                if (pr['user'] && !ignored_users_list.includes(pr['user']['login'])) {
-                    parsedPr['user'] = pr['user']['login'];
-                    if (!pr['draft']) {
-                        parsedPrList.push(parsedPr);
+                if (pr['user']) {
+                    if (!ignored_users_list.includes(pr['user']['login'])) {
+                        parsedPr['user'] = pr['user']['login'];
+                        if (!pr['draft']) {
+                            parsedPrList.push(parsedPr);
+                        }
+                    }
+                    else {
+                        ignored_users_pr_count += 1;
                     }
                 }
+            }
+            if (ignored_users_pr_count !== 0) {
+                ignored_users_pr_count_per_repository.push({
+                    repository: r,
+                    pr_count: ignored_users_pr_count
+                });
             }
         }
         const format = core.getInput('format');
@@ -29059,6 +29072,11 @@ async function run() {
             let markdownOutput = '';
             for (const pr of parsedPrList) {
                 markdownOutput += `* [${pr['title']}](${pr['url']}) by ${pr['user']}\n`;
+            }
+            if (ignored_users_pr_count_per_repository.length !== 0) {
+                for (const repo of ignored_users_pr_count_per_repository) {
+                    markdownOutput += `* ${repo.pr_count} PRs by ignored users in [${repo.repository}](https://github.com/${repo.repository}/pulls)`;
+                }
             }
             core.setOutput('PRs', markdownOutput);
         }
