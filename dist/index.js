@@ -29075,7 +29075,7 @@ async function run() {
             }
             if (ignored_users_pr_count_per_repository.length !== 0) {
                 for (const repo of ignored_users_pr_count_per_repository) {
-                    markdownOutput += `* ${repo.pr_count} PRs by ignored users in [${repo.repository}](https://github.com/${repo.repository}/pulls)`;
+                    markdownOutput += `* ${repo.pr_count} PRs by ignored users in [${repo.repository}](https://github.com/${repo.repository}/pulls)\n`;
                 }
             }
             core.setOutput('PRs', markdownOutput);
